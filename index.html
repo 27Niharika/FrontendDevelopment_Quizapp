@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Portal</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* 3D Animated Gradient Background */
+    body.landing {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      perspective: 1200px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #4c6ef5, #15aabf);
+      animation: gradientShift 10s infinite alternate;
+      color: #fff;
+    }
+
+    @keyframes gradientShift {
+      0% {
+        background: linear-gradient(135deg, #4c6ef5, #15aabf);
+      }
+      25% {
+        background: linear-gradient(135deg, #6a11cb, #2575fc);
+      }
+      50% {
+        background: linear-gradient(135deg, #ff416c, #ff4b2b);
+      }
+      75% {
+        background: linear-gradient(135deg, #00c6ff, #0072ff);
+      }
+      100% {
+        background: linear-gradient(135deg, #4c6ef5, #15aabf);
+      }
+    }
+
+    /* Floating 3D bubbles effect */
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.6;
+      animation: floatBubble linear infinite;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.6), transparent);
+    }
+
+    @keyframes floatBubble {
+      0% {
+        transform: translateY(100vh) scale(0);
+      }
+      50% {
+        transform: translateY(50vh) scale(1);
+      }
+      100% {
+        transform: translateY(-50vh) scale(0);
+      }
+    }
+
+    /* Centered content */
+    .landing-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      animation: contentPop 1s ease;
+    }
+
+    @keyframes contentPop {
+      0% { transform: scale(0.9); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+      text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    p {
+      font-size: 20px;
+      margin-bottom: 30px;
+      text-shadow: 0 3px 8px rgba(0,0,0,0.2);
+    }
+
+    .btn {
+      background: linear-gradient(45deg, #ff416c, #ff4b2b);
+      color: #fff;
+      font-size: 20px;
+      font-weight: bold;
+      padding: 15px 30px;
+      border-radius: 12px;
+      text-decoration: none;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+    }
+  </style>
+</head>
+<body class="landing">
+  <div class="landing-content">
+    <h1>🚀 Welcome to the Ultimate Quiz</h1>
+    <p>Challenge yourself, climb the leaderboard, and have fun!</p>
+    <a class="btn" href="category.html">Start Quiz</a>
+  </div>
+
+  <script>
+    // Create floating bubbles
+    for(let i = 0; i < 30; i++){
+      const bubble = document.createElement('div');
+      bubble.classList.add('bubble');
+      const size = Math.random() * 60 + 20;
+      bubble.style.width = size + 'px';
+      bubble.style.height = size + 'px';
+      bubble.style.left = Math.random() * 100 + 'vw';
+      bubble.style.animationDuration = (Math.random() * 20 + 10) + 's';
+      bubble.style.animationDelay = Math.random() * 10 + 's';
+      document.body.appendChild(bubble);
+    }
+  </script>
+</body>
+</html>

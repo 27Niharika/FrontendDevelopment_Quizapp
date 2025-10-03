@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Select Topic</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #1e1e2f, #2a2a40);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding-top: 40px;
+      overflow-x: hidden;
+    }
+
+    .landing-content {
+      text-align: center;
+      animation: fadeIn 1s ease-in-out;
+      width: 90%;
+      max-width: 1200px;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 40px;
+      text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+
+    h2 {
+      text-align: left;
+      margin-top: 30px;
+      margin-bottom: 15px;
+      font-size: 1.5rem;
+    }
+
+    .categories {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      perspective: 1000px;
+    }
+
+    .topic-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 25px;
+    }
+
+    .topic-card {
+      border-radius: 16px;
+      padding: 25px 15px;
+      text-align: center;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+      transform-style: preserve-3d;
+      transition: transform 0.5s, box-shadow 0.3s;
+      position: relative;
+      overflow: hidden;
+      min-height: 120px;
+    }
+
+    /* Category gradients */
+    .cs { background: linear-gradient(135deg, #ff6a00, #ee0979); }
+    .gk { background: linear-gradient(135deg, #e21273, #e0cdd8); }
+    .sports { background: linear-gradient(135deg, #4126dd, #777588); }
+    .history { background: linear-gradient(135deg, #ebdb08, #6df74a); }
+
+    /* Header gradient colors */
+    .cs-header { background: linear-gradient(90deg, #ff6a00, #ee0979); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .gk-header { background: linear-gradient(90deg, #e21273, #e0cdd8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .sports-header { background: linear-gradient(90deg, #4126dd, #777588); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .history-header { background: linear-gradient(90deg, #ebdb08, #6df74a); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+    .topic-card:hover {
+      transform: rotateY(12deg) rotateX(5deg) scale(1.05);
+      box-shadow: 0 25px 40px rgba(0,0,0,0.6);
+    }
+
+    .topic-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      transform: translateZ(20px);
+    }
+
+    .topic-icon {
+      font-size: 28px;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .description {
+      font-size: 13px;
+      opacity: 0.85;
+      margin-top: 5px;
+      line-height: 1.2;
+      text-align: center;
+      display: none;
+    }
+
+    .selected {
+      box-shadow: 0 15px 35px rgba(255,255,255,0.7) !important;
+    }
+
+    #next-btn {
+      margin-top: 30px;
+      padding: 15px 30px;
+      font-size: 18px;
+      background: linear-gradient(45deg, #5c6bc0, #3949ab);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    #next-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      h1 { font-size: 1.8rem; }
+      h2 { font-size: 1.3rem; }
+      .topic-card { padding: 20px 10px; font-size: 14px; min-height: 100px; }
+      .topic-icon { font-size: 24px; }
+      #next-btn { font-size: 16px; padding: 12px 25px; }
+    }
+
+    @media (max-width: 480px) {
+      body { padding-top: 20px; }
+      h1 { font-size: 1.5rem; margin-bottom: 25px; }
+      h2 { font-size: 1.1rem; margin-top: 20px; margin-bottom: 10px; }
+      .topic-card { padding: 15px 8px; font-size: 13px; min-height: 90px; }
+      .topic-icon { font-size: 20px; }
+      #next-btn { font-size: 14px; padding: 10px 20px; }
+      .categories { gap: 25px; }
+      .topic-cards { gap: 15px; }
+    }
+  </style>
+</head>
+<body class="landing">
+  <div class="landing-content">
+    <h1 id="title">Lets View the Quiz Categories and Levels</h1>
+    <h2> Tap on the categories to explore topics</h2>
+    <div class="categories" id="subcategories"></div>
+    <button id="next-btn">Next ➡️</button>
+  </div>
+
+  <script>
+    const container = document.getElementById("subcategories");
+    const nextBtn = document.getElementById("next-btn");
+    let selectedTopic = null;
+    let selectedCategory = null;
+
+    const categories = {
+      "Computer Science": [
+        { name: "C", icon: "fa-solid fa-code", desc: "Foundational programming language." },
+        { name: "C++", icon: "fa-solid fa-code-branch", desc: "Object-oriented programming language." },
+        { name: "Java", icon: "fa-brands fa-java", desc: "Popular language for web and mobile apps." },
+        { name: "Python", icon: "fa-brands fa-python", desc: "Easy-to-learn language used in AI, web, data science." },
+        { name: "HTML", icon: "fa-brands fa-html5", desc: "Markup language to structure web pages." },
+        { name: "JavaScript", icon: "fa-brands fa-js", desc: "Programming language for interactivity." },
+        { name: "AI", icon: "fa-solid fa-brain", desc: "Artificial intelligence concepts." },
+        { name: "ML", icon: "fa-solid fa-robot", desc: "Machine learning techniques." },
+        { name: "Database", icon: "fa-solid fa-database", desc: "Store, query, and manage data." }
+      ],
+      "General Knowledge": [
+        { name: "World History", icon: "fa-solid fa-landmark", desc: "Learn important historical events." },
+        { name: "Geography", icon: "fa-solid fa-globe", desc: "Study countries, capitals, and landscapes." },
+        { name: "Science", icon: "fa-solid fa-flask", desc: "Physics, Chemistry, Biology basics." },
+        { name: "Current Affairs", icon: "fa-solid fa-newspaper", desc: "Latest happenings around the world." }
+      ],
+      "Sports": [
+        { name: "Football", icon: "fa-solid fa-futbol", desc: "Rules, players, and history." },
+        { name: "Cricket", icon: "fa-solid fa-cricket-bat-ball", desc: "Learn about matches and players." },
+        { name: "Olympics", icon: "fa-solid fa-medal", desc: "History and records." },
+        { name: "Tennis", icon: "fa-solid fa-table-tennis-paddle-ball", desc: "Rules and tournaments." }
+      ],
+      "History": [
+        { name: "Ancient", icon: "fa-solid fa-monument", desc: "Civilizations and cultures." },
+        { name: "Medieval", icon: "fa-solid fa-chess-rook", desc: "Medieval history and kingdoms." },
+        { name: "Modern", icon: "fa-solid fa-landmark-dome", desc: "Modern historical events." },
+        { name: "World Wars", icon: "fa-solid fa-bomb", desc: "WWI & WWII events." }
+      ]
+    };
+
+    const categoryClassMap = {
+      "Computer Science": "cs",
+      "General Knowledge": "gk",
+      "Sports": "sports",
+      "History": "history"
+    };
+
+    const headerClassMap = {
+      "Computer Science": "cs-header",
+      "General Knowledge": "gk-header",
+      "Sports": "sports-header",
+      "History": "history-header"
+    };
+
+    ["Computer Science","General Knowledge","Sports","History"].forEach(cat => {
+      const catHeader = document.createElement("h2");
+      catHeader.textContent = cat;
+      catHeader.className = headerClassMap[cat];
+      container.appendChild(catHeader);
+
+      const cardContainer = document.createElement("div");
+      cardContainer.className = "topic-cards";
+      categories[cat].forEach(topic => {
+        const card = document.createElement("div");
+        card.className = `topic-card ${categoryClassMap[cat]}`;
+        card.innerHTML = `
+          <i class="${topic.icon} topic-icon"></i>
+          <div>${topic.name}</div>
+          <div class="description">${topic.desc}</div>
+        `;
+        card.onclick = () => {
+          selectedTopic = topic.name;
+          selectedCategory = cat;
+
+          document.querySelectorAll('.topic-card').forEach(c => {
+            c.classList.remove('selected');
+            c.querySelector('.description').style.display = 'none';
+          });
+
+          card.classList.add('selected');
+          card.querySelector('.description').style.display = 'block';
+        };
+        cardContainer.appendChild(card);
+      });
+      container.appendChild(cardContainer);
+    });
+
+    nextBtn.onclick = () => {
+      if (!selectedTopic || !selectedCategory) {
+        alert("Please select a topic first!");
+        return;
+      }
+      localStorage.setItem('selectedCategory', selectedCategory);
+      localStorage.setItem('selectedTopic', selectedTopic);
+
+      window.location.href = `levels.html?cat=${encodeURIComponent(selectedCategory)}&topic=${encodeURIComponent(selectedTopic)}`;
+    };
+  </script>
+</body>
+</html>

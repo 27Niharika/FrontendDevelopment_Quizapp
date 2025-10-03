@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quizzy Learn Score & Certificate</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Roboto:wght@400;700&display=swap');
+
+  body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #021050, #9427dd);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .page-content {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .page-content h1 {
+    font-size: 2rem;
+    margin: 0;
+  }
+
+  .page-content p {
+    font-size: 1.2rem;
+    margin: 5px 0 0 0;
+  }
+
+  #player-input-section {
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+  }
+
+  #playerInput {
+    padding: 12px 15px;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    border: 1px solid #9c27b0;
+    margin-bottom: 10px;
+    width: 80%;
+    max-width: 300px;
+    background: linear-gradient(145deg, #606ff8, #eae9eb);
+    color: #fff;
+    font-weight: bold;
+  }
+
+  #playerInput:focus {
+    outline: none;
+    border-color: #f093fb;
+    box-shadow: 0 0 10px #f093fb;
+  }
+
+  #player-input-section button {
+    padding: 12px 20px;
+    font-size: 1rem;
+  }
+
+  #score-section, #certificate {
+    width: 100%;
+    max-width: 900px;
+    text-align: center;
+  }
+
+  #score-section h2, #score-section p {
+    margin: 10px 0;
+  }
+
+.certificate-container {
+  position: relative;
+  width: 90%;
+  max-width: 900px;
+  margin: auto;
+  background: #fff; /* clean white background */
+  border: 5px solid #d4af37; /* gold border */
+  padding: 60px 40px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+/* Left vertical strip */
+.certificate-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 60px;
+  width: 80px;
+  height: 100%;
+  background: #0b1b65; /* dark blue strip */
+  border-left: 8px solid #d4af37; /* gold edge */
+  border-right: 8px solid #d4af37;
+}
+
+/* Company Logo inside strip */
+.company-logo {
+  position: absolute;
+  top: 50%;
+  left: 100px; /* center of strip */
+  transform: translate(-50%, -50%);
+  width: 90px;
+  height: 100px;
+  border: 6px solid #d4af37; /* gold ring around logo */
+  border-radius: 50%;
+  background: #fff;
+  padding: 10px;
+  object-fit: contain;
+}
+
+/* Badge on top-right corner */
+.certificate-badge {
+  width: 100px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: contain;
+  position: absolute;
+  top: 50px;
+  right: 40px;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+}
+
+
+  .certificate-title {
+    font-family: 'Great Vibes', cursive;
+    font-size: 2.5rem;
+    color: #7b1fa2;
+    margin: 20px 0 10px 0;
+  }
+
+  .certificate-subtitle {
+    font-size: 1.2rem;
+    color: #5e35b1;
+    margin-bottom: 15px;
+  }
+
+  .player-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #4a148c;
+    margin: 10px 0;
+  }
+
+  .score-text, .quiz-category, .issued-date, .badge {
+    font-size: 1rem;
+    color: #1a237e;
+    margin: 3px 0;
+  }
+
+  .certified-by {
+    font-family: 'Great Vibes', cursive;
+    font-size: 1.5rem;
+    color: #4a148c;
+    margin-top: 30px;
+    font-weight: bold;
+    text-decoration: underline;
+  }
+
+  .social-icons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 15px 0;
+    justify-content: center;
+  }
+
+  .social-icons a {
+    color: #4527a0;
+    font-size: 1.5rem;
+    transition: transform 0.3s, color 0.3s;
+  }
+
+  .social-icons a:hover {
+    transform: scale(1.2);
+    color: #7b1fa2;
+  }
+
+  button {
+    margin: 5px;
+    padding: 10px 18px;
+    font-size: 1rem;
+    background: linear-gradient(45deg, #5c6bc0, #3949ab);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .certificate-container { padding: 15px; }
+    .certificate-title { font-size: 2rem; }
+    .certificate-subtitle { font-size: 1rem; }
+    .player-name { font-size: 1.3rem; }
+    .score-text, .quiz-category, .issued-date, .badge { font-size: 0.9rem; }
+    .certificate-badge { width: 80px; height: 80px; top: 10px; right: 10px; }
+    .company-logo { width: 120px; }
+    .certified-by { font-size: 1.1rem; }
+  }
+
+  @media (max-width: 480px) {
+    #playerInput { width: 100%; }
+    .certificate-title { font-size: 1.7rem; }
+    .certificate-subtitle { font-size: 0.9rem; }
+    .player-name { font-size: 1.1rem; }
+    .score-text, .quiz-category, .issued-date, .badge { font-size: 0.8rem; }
+    .social-icons a { font-size: 1.2rem; }
+    .company-logo { width: 100px; }
+  }
+</style>
+</head>
+<body>
+<div class="page-content">
+  <h1>Congratulations Player</h1>
+  <p>It's time To Earn your Certificate</p>
+</div>
+
+<div id="player-input-section">
+  <input type="text" id="playerInput" placeholder="Enter your name to generate certificate">
+  <button onclick="showScore()">Submit</button>
+</div>
+
+<div id="score-section" style="display:none;">
+  <h2 id="display-name"></h2>
+  <p id="display-category-score"></p>
+  <button onclick="showCertificate()">Show Certificate</button>
+</div>
+
+<div class="certificate-container" id="certificate" style="display:none;">
+  <!-- Company Logo -->
+  <img src="quizzylearn.png" alt="quizzylearn" class="company-logo">
+
+  <!-- Badge -->
+  <img src="badge.png" alt="Badge" class="certificate-badge">
+
+  <div class="certificate-title">🎓 Quizzy Learn</div>
+  <div class="certificate-subtitle">Certificate of Achievement</div>
+  <div class="player-name" id="player-name">Player Name</div>
+  <div class="score-text" id="score-text">You scored 0 out of 0</div>
+  <div class="quiz-category" id="quiz-category">Quiz Category: None</div>
+  <div class="issued-date" id="issued-date">Issued on: --/--/----</div>
+  <div class="badge" id="badge-text">Beginner</div>
+  <h2>Congratulations you have completed the quiz!</h2>
+
+  <!-- CEO Signature -->
+  <div class="certified-by">Certified by CEO: Niharika R</div>
+
+  <div class="social-icons">
+    <a href="#" id="whatsapp-share" target="_blank"><i class="fab fa-whatsapp"></i></a>
+    <a href="#" id="telegram-share" target="_blank"><i class="fab fa-telegram"></i></a>
+    <a href="#" id="facebook-share" target="_blank"><i class="fab fa-facebook"></i></a>
+    <a href="#" id="twitter-share" target="_blank"><i class="fab fa-twitter"></i></a>
+    <a href="#" id="linkedin-share" target="_blank"><i class="fab fa-linkedin"></i></a>
+    <a href="#" id="instagram-share" target="_blank"><i class="fab fa-instagram"></i></a>
+  </div>
+
+  <button onclick="goBack()">Take Another Quiz</button>
+  <button onclick="downloadCertificate()">Download Certificate</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+const score = localStorage.getItem('quizScore') || 0;
+const total = localStorage.getItem('quizTotal') || 10;
+const topic = localStorage.getItem('quizTopic') || 'General';
+const level = localStorage.getItem('quizLevel') || 'Beginner';
+const badge = localStorage.getItem('quizBadge') || level;
+
+const category = `${topic} - ${level} Level`;
+
+function showScore() {
+  const playerName = document.getElementById('playerInput').value || 'Player';
+  localStorage.setItem('playerName', playerName);
+  document.getElementById('display-name').textContent = `Hello, ${playerName}!`;
+  document.getElementById('display-category-score').textContent = `You scored ${score} out of ${total} in "${category}"`;
+  document.getElementById('player-input-section').style.display = 'none';
+  document.getElementById('score-section').style.display = 'block';
+}
+
+function showCertificate() {
+  const playerName = localStorage.getItem('playerName') || 'Player';
+  document.getElementById('player-name').textContent = playerName;
+  document.getElementById('score-text').textContent = `You scored ${score} out of ${total}`;
+  document.getElementById('quiz-category').textContent = `Quiz Category: ${category}`;
+  const today = new Date();
+  const issuedDateTime = today.toLocaleDateString('en-GB', { day:'2-digit', month:'long', year:'numeric' }) + " " + today.toLocaleTimeString('en-GB');
+  document.getElementById('issued-date').textContent = `Issued on: ${issuedDateTime}`;
+  document.getElementById('badge-text').textContent = badge;
+
+  const message = `🎓 Quizzy Learn Certificate 🏆\n\n${playerName} scored ${score}/${total} in "${category}" and earned "${badge}" badge.\nIssued on: ${issuedDateTime}\nJoin Quizzy Learn! 🚀`;
+  document.getElementById("whatsapp-share").href = `https://wa.me/?text=${encodeURIComponent(message)}`;
+  document.getElementById("telegram-share").href = `https://t.me/share/url?url=${encodeURIComponent(message)}`;
+  document.getElementById("facebook-share").href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(message)}`;
+  document.getElementById("twitter-share").href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`;
+  document.getElementById("linkedin-share").href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(message)}`;
+  document.getElementById("instagram-share").href = `https://www.instagram.com/?url=${encodeURIComponent(message)}`;
+
+  document.getElementById('score-section').style.display = 'none';
+  document.getElementById('certificate').style.display = 'block';
+}
+
+function goBack() {
+  window.location.href = "quiz.html";
+}
+
+function downloadCertificate() {
+  const certificate = document.getElementById('certificate');
+  html2canvas(certificate, { scale: 2 }).then(canvas => {
+    const imgData = canvas.toDataURL('image/png');
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [canvas.width, canvas.height] });
+    pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+    const playerName = localStorage.getItem('playerName') || 'Player';
+    pdf.save(`${playerName}_QuizzyCertificate.pdf`);
+  });
+}
+</script>
+</body>
+</html>

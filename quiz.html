@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multi-Topic Quiz</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background: radial-gradient(circle at top, #0f172a, #020617);
+  color: #fff;
+}
+
+.quiz-container {
+  margin-top: 40px;
+  width: 95%;
+  max-width: 800px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 25px;
+  padding: 35px 30px;
+  box-shadow: 0 0 40px rgba(0, 255, 255, 0.5),
+              0 0 60px rgba(255, 0, 255, 0.3) inset;
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  box-sizing: border-box;
+}
+
+h1 {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 25px;
+  text-shadow: 0 0 5px #00f2fe, 0 0 15px #f5576c;
+  animation: textGlow 2.5s infinite alternate;
+}
+
+@keyframes textGlow {
+  0% { text-shadow: 0 0 5px #00f2fe, 0 0 15px #f5576c; }
+  50% { text-shadow: 0 0 10px #00f2fe, 0 0 20px #f5576c; }
+  100% { text-shadow: 0 0 5px #00f2fe, 0 0 15px #f5576c; }
+}
+
+.topic-select, .level-select {
+  margin: 10px 0;
+  width: 100%;
+  padding: 12px 40px 12px 12px;
+  font-size: 1rem;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #0d1529, #061938, #0a0f21, #08122b);
+  color: #00f2fe;
+  font-weight: bold;
+  text-shadow: 0 0 8px #00f2fe;
+  box-shadow: 0 0 15px rgba(0,255,255,0.5), inset 0 0 5px rgba(0,255,255,0.2);
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.topic-select:hover, .level-select:hover,
+.topic-select:focus, .level-select:focus {
+  background: linear-gradient(135deg, #0a0f21, #08122b, #0d1529, #061938);
+  color: #00ffff;
+  box-shadow: 0 0 25px rgba(0,255,255,0.8), inset 0 0 8px rgba(0,255,255,0.3);
+  outline: none;
+}
+
+.topic-select::after, .level-select::after {
+  content: "▼";
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #00f2fe;
+  font-size: 0.9rem;
+  text-shadow: 0 0 5px #00f2fe, 0 0 10px #00f2fe, 0 0 20px #00f2fe, 0 0 30px #00f2fe;
+  animation: neonArrowGlow 1.5s infinite alternate;
+}
+
+@keyframes neonArrowGlow {
+  0% { text-shadow: 0 0 5px #00f2fe, 0 0 10px #00f2fe, 0 0 20px #00f2fe, 0 0 30px #00f2fe; }
+  50% { text-shadow: 0 0 8px #00ffff, 0 0 16px #00ffff, 0 0 24px #00ffff, 0 0 36px #00ffff; }
+  100% { text-shadow: 0 0 5px #00f2fe, 0 0 10px #00f2fe, 0 0 20px #00f2fe, 0 0 30px #00f2fe; }
+}
+
+.topic-select option, .level-select option {
+  background: #061938;
+  color: #00f2fe;
+}
+
+.save-start-btn {
+  margin-top: 20px;
+  padding: 14px 30px;
+  font-size: 18px;
+  font-weight: bold;
+  background: linear-gradient(100deg, #ebe3f0, #ab47bc);
+  color: #68187c;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.save-start-btn:hover { transform: scale(1.05); }
+
+.timer { text-align: right; margin-top: 10px; color: #00f2fe; font-weight: bold; }
+.question { font-size: 1.3rem; margin: 20px 0; color: #00f2fe; }
+.options { display: grid; gap: 12px; }
+.option {
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.1);
+  cursor: pointer;
+  transition: 0.3s;
+  border: 2px solid transparent;
+}
+.option:hover { background: rgba(0,255,255,0.2); transform: scale(1.03); }
+.option.selected { border: 2px solid #f5576c; background: rgba(255,255,255,0.2); }
+
+.controls { display: flex; justify-content: space-between; margin-top: 15px; flex-wrap: wrap; gap: 10px; }
+.btn {
+  padding: 10px 20px; font-weight: bold;
+  border-radius: 10px; border: none; cursor: pointer;
+  background: linear-gradient(45deg,#00f2fe,#4facfe);
+}
+
+.progress-container { margin-top: 20px; width: 100%; height: 10px; background: rgba(255,255,255,0.1); border-radius: 5px; }
+.progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg,#f093fb,#f5576c); transition: width 0.3s; }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .quiz-container { padding: 25px 20px; margin-top: 25px; }
+  h1 { font-size: 1.6rem; margin-bottom: 20px; }
+  .topic-select, .level-select { padding: 10px 35px 10px 10px; font-size: 0.95rem; }
+  .save-start-btn { padding: 12px 25px; font-size: 16px; }
+  .question { font-size: 1.1rem; }
+  .option { padding: 10px; font-size: 0.95rem; }
+  .btn { padding: 8px 18px; font-size: 0.95rem; }
+}
+
+@media (max-width: 480px) {
+  .quiz-container { padding: 20px 15px; margin-top: 20px; }
+  h1 { font-size: 1.3rem; margin-bottom: 15px; }
+  .topic-select, .level-select { padding: 8px 30px 8px 8px; font-size: 0.9rem; }
+  .save-start-btn { padding: 10px 20px; font-size: 14px; }
+  .question { font-size: 1rem; }
+  .option { padding: 8px; font-size: 0.9rem; }
+  .controls { flex-direction: column; gap: 8px; }
+  .btn { width: 100%; text-align: center; padding: 10px; font-size: 0.9rem; }
+}
+</style>
+</head>
+<body>
+<div class="quiz-container">
+  <h1 id="quiz-title">Select Topic & Level</h1>
+
+  <select id="topic-select" class="topic-select">
+    <option value="">Select Topic</option>
+    <option value="18">Computer Science</option>
+    <option value="9">General Knowledge</option>
+    <option value="21">Sports</option>
+    <option value="23">History</option>
+  </select>
+
+  <select id="level-select" class="level-select">
+    <option value="">Select Level</option>
+    <option value="easy">Easy</option>
+    <option value="medium">Medium</option>
+    <option value="hard">Hard</option>
+  </select>
+
+  <button id="save-start-btn" class="save-start-btn">💾 Save & Start Quiz</button>
+
+  <div class="timer" id="timer"></div>
+  <div class="question" id="question"></div>
+  <div class="options" id="options"></div>
+
+  <div class="controls">
+    <button class="btn" id="prev">Previous</button>
+    <button class="btn" id="next">Next</button>
+  </div>
+
+  <div class="progress-container">
+    <div class="progress-bar" id="progress-bar"></div>
+  </div>
+</div>
+
+<script>
+let questions = [];
+let currentQuestion = 0;
+let userAnswers = [];
+let timerInterval;
+let timeLeft = 15;
+let quizStarted = false;
+
+const topicSelect = document.getElementById('topic-select');
+const levelSelect = document.getElementById('level-select');
+const questionEl = document.getElementById('question');
+const optionsEl = document.getElementById('options');
+const progressBar = document.getElementById('progress-bar');
+const nextBtn = document.getElementById('next');
+const prevBtn = document.getElementById('prev');
+const timerEl = document.getElementById('timer');
+const quizTitle = document.getElementById('quiz-title');
+const saveStartBtn = document.getElementById('save-start-btn');
+
+function decodeHTML(str) {
+  const txt = document.createElement("textarea");
+  txt.innerHTML = str;
+  return txt.value;
+}
+
+function shuffleArray(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function startTimer() {
+  clearInterval(timerInterval);
+  timeLeft = 15;
+  timerEl.textContent = `Time: ${timeLeft}s`;
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    timerEl.textContent = `Time: ${timeLeft}s`;
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      nextQuestion();
+    }
+  }, 1000);
+}
+
+function showQuestion() {
+  startTimer();
+  const q = questions[currentQuestion];
+  questionEl.textContent = q.question;
+  optionsEl.innerHTML = "";
+
+  q.options.forEach(opt => {
+    const div = document.createElement("div");
+    div.className = "option";
+    div.textContent = opt;
+    div.onclick = () => {
+      userAnswers[currentQuestion] = opt;
+      document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+      div.classList.add('selected');
+    };
+    if (userAnswers[currentQuestion] === opt) div.classList.add("selected");
+    optionsEl.appendChild(div);
+  });
+
+  updateProgress();
+}
+
+function nextQuestion() {
+  if (currentQuestion < questions.length - 1) {
+    currentQuestion++;
+    showQuestion();
+  } else {
+    clearInterval(timerInterval);
+    let score = 0;
+    questions.forEach((q, i) => {
+      if (userAnswers[i] === q.correct) score++;
+    });
+
+    localStorage.setItem("quizScore", score);
+    localStorage.setItem("quizTotal", questions.length);
+    localStorage.setItem("quizTopic", topicSelect.options[topicSelect.selectedIndex].text);
+    localStorage.setItem("quizLevel", levelSelect.options[levelSelect.selectedIndex].text);
+
+    window.location.href = "score.html";
+  }
+}
+
+function prevQuestion() {
+  if (currentQuestion > 0) {
+    currentQuestion--;
+    showQuestion();
+  }
+}
+
+function updateProgress() {
+  progressBar.style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
+}
+
+nextBtn.onclick = () => {
+  if (!quizStarted) { alert("Please start the quiz first!"); return; }
+  nextQuestion();
+};
+prevBtn.onclick = () => { if (!quizStarted) return; prevQuestion(); };
+
+async function fetchQuestions(topicId) {
+  const url = `https://opentdb.com/api.php?amount=10&category=${topicId}&type=multiple`;
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    if (!data.results || data.results.length === 0) throw new Error("No questions");
+    return data.results.map(q => ({
+      question: decodeHTML(q.question),
+      options: shuffleArray([decodeHTML(q.correct_answer), ...q.incorrect_answers.map(decodeHTML)]),
+      correct: decodeHTML(q.correct_answer)
+    }));
+  } catch (err) {
+    return new Promise(resolve => {
+      setTimeout(async () => {
+        const retryData = await fetchQuestions(topicId);
+        resolve(retryData);
+      }, 1000);
+    });
+  }
+}
+
+saveStartBtn.onclick = async () => {
+  const selectedTopic = topicSelect.value;
+  const selectedLevel = levelSelect.value;
+
+  if (!selectedTopic || !selectedLevel) {
+    alert("Please select both topic and level.");
+    return;
+  }
+
+  quizStarted = true;
+
+  const topicName = topicSelect.options[topicSelect.selectedIndex].text;
+  quizTitle.textContent = "Loading Questions...";
+  questionEl.textContent = "";
+  optionsEl.innerHTML = "";
+
+  questions = await fetchQuestions(selectedTopic);
+
+  currentQuestion = 0;
+  userAnswers = [];
+  quizTitle.textContent = `${topicName} - ${selectedLevel.toUpperCase()} Level Quiz`;
+  showQuestion();
+};
+</script>
+</body>
+</html>

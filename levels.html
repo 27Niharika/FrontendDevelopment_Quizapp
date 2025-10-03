@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Select Level</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at top, #0f172a, #020617);
+      color: #fff;
+    }
+
+    .landing-content {
+      text-align: center;
+      animation: fadeIn 1.5s ease-in-out;
+      width: 95%;
+      max-width: 900px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      text-shadow: 0 0 15px rgba(0, 255, 255, 0.7);
+    }
+
+    h2 {
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+      color: #ccc;
+    }
+
+    .levels {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 25px;
+      margin: auto;
+      padding: 10px;
+    }
+
+    .level-card {
+      padding: 25px 15px;
+      border-radius: 20px;
+      font-weight: bold;
+      text-align: center;
+      color: #fff;
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid transparent;
+      transition: transform 0.4s ease, box-shadow 0.4s ease, border 0.4s ease;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .level-card:hover {
+      transform: perspective(1000px) rotateY(8deg) scale(1.05);
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
+    }
+
+    .level-card .desc {
+      font-size: 13px;
+      opacity: 0.8;
+      margin-top: 10px;
+      display: none;
+    }
+
+    .selected {
+      box-shadow: 0 0 30px rgba(255,255,255,0.9) !important;
+    }
+
+    .level1:hover { border-image: linear-gradient(45deg, #00f2fe, #4facfe) 1; }
+    .level2:hover { border-image: linear-gradient(45deg, #f093fb, #f5576c) 1; }
+    .level3:hover { border-image: linear-gradient(45deg, #43e97b, #38f9d7) 1; }
+
+    .icon {
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    #next-btn {
+      margin-top: 25px;
+      padding: 12px 25px;
+      font-size: 16px;
+      background: linear-gradient(45deg, #00c6ff, #0072ff);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    #next-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      h1 { font-size: 2rem; }
+      h2 { font-size: 1rem; }
+      .levels { gap: 20px; }
+      .level-card { padding: 20px 12px; font-size: 14px; }
+      .icon { font-size: 2rem; }
+      #next-btn { font-size: 15px; padding: 10px 22px; }
+    }
+
+    @media (max-width: 480px) {
+      h1 { font-size: 1.6rem; margin-bottom: 1.5rem; }
+      h2 { font-size: 0.9rem; margin-bottom: 1rem; }
+      .levels { gap: 15px; }
+      .level-card { padding: 15px 10px; font-size: 13px; }
+      .icon { font-size: 1.6rem; }
+      #next-btn { font-size: 14px; padding: 8px 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="landing-content">
+    <h1 id="title">Choose a Level</h1>
+    <h2>Tap on the levels to explore Instructions</h2>
+    <div class="levels" id="levels"></div>
+    <button id="next-btn">Next ➡️</button>
+  </div>
+
+  <script>
+    const url = new URL(location.href);
+    const cat = url.searchParams.get('cat') || '';
+    const topic = url.searchParams.get('topic') || '';
+
+    const levels = [
+      { name: 'Beginner', icon: '📘', desc: '10 Easy questions, 15 sec per question.' },
+      { name: 'Medium', icon: '⚙️', desc: '10 Medium questions, 15 sec per question.' },
+      { name: 'Advanced', icon: '🚀', desc: '10 Hard questions, 15 sec per question.' },
+    ];
+
+    const container = document.getElementById('levels');
+    document.getElementById('title').textContent = `${topic} - Select Level`;
+
+    let selectedLevel = null;
+
+    levels.forEach((level, i) => {
+      const card = document.createElement('div');
+      card.className = `level-card level${i+1}`;
+      card.innerHTML = `
+        <span class="icon">${level.icon}</span>
+        <div>${level.name}</div>
+        <div class="desc">${level.desc}</div>
+      `;
+
+      card.onclick = () => {
+        selectedLevel = level.name;
+
+        document.querySelectorAll('.level-card').forEach(c => {
+          c.classList.remove('selected');
+          c.querySelector('.desc').style.display = 'none';
+        });
+
+        card.classList.add('selected');
+        card.querySelector('.desc').style.display = 'block';
+      };
+
+      container.appendChild(card);
+    });
+
+    document.getElementById('next-btn').onclick = () => {
+      if (!selectedLevel) {
+        alert('Please select a level first!');
+        return;
+      }
+      localStorage.setItem('selectedCategory', cat);
+      localStorage.setItem('selectedTopic', topic);
+      localStorage.setItem('selectedLevel', selectedLevel);
+      window.location.href = `quiz.html?cat=${cat}&topic=${encodeURIComponent(topic)}&level=${encodeURIComponent(selectedLevel)}`;
+    };
+  </script>
+</body>
+</html>
